@@ -96,7 +96,7 @@ RUN echo "安装 mongodb 服务" \
 
 # 在客户端登录时自动启动 GUI 程序 (might not be the best way to do it, but it does the trick)
 #RUN bash -c 'echo "python /srv/vnpy/examples/VnTrader/run_simple.py" >> ~/.bashrc'
-#RUN bash -c 'echo "/usr/bin/xterm" >> ~/.bashrc'
+RUN bash -c 'echo "/usr/bin/xterm" >> ~/.bashrc'
 # 设置登录时开启本地 mongodb 服务并激活图形管理界面
 #RUN bash -c 'echo "service mongodb restart" >> ~/.bashrc'
 
