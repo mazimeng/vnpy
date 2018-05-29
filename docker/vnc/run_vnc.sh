@@ -11,8 +11,8 @@ DIR=$(cd `dirname $0`; pwd)
 
 # Run docker container, mapping the ssh and vnc ports:
 docker run --name vnpy_vnc --rm \
-    -v ${DIR}/..:/srv/vnpy \
+    -v $PWD/../..:/srv/vnpy \
     -p 5900:5900 -p 27018:27017 \
     vnpy:latest \
-    /usr/bin/x11vnc -forever -usepw -create
+    /usr/bin/x11vnc -forever -create
 

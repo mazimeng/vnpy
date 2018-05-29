@@ -19,7 +19,7 @@ read -p "确定开始构建镜像？ [N|y]:" input
 case "$input" in
 [Yy])
     # 构建镜像时，如有问题可以添加 --no-cache 参数以不使用缓存
-    docker build -f Dockerfile --force-rm -t vnpy ..
+    docker build -f Dockerfile --force-rm -t vnpy ../..
     echo -n "构建完毕。"
     ;;
 *)

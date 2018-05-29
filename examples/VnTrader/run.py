@@ -24,7 +24,8 @@ from vnpy.trader.gateway import (ctpGateway, oandaGateway,
                                  ibGateway)
 
 if system == 'Linux':
-    from vnpy.trader.gateway import xtpGateway
+    pass
+    #from vnpy.trader.gateway import xtpGateway
 elif system == 'Windows':
     from vnpy.trader.gateway import (femasGateway, xspeedGateway,
                                      futuGateway, secGateway)
@@ -57,7 +58,8 @@ def main():
         me.addGateway(futuGateway)
 
     if system == 'Linux':
-        me.addGateway(xtpGateway)
+        pass
+        #me.addGateway(xtpGateway)
 
     # 添加上层应用
     me.addApp(riskManager)

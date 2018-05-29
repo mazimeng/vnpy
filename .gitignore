@@ -46,10 +46,19 @@ vn.ctp/build/*
 vn.lts/build/*
 .idea
 .vscode
-.gitignore
 
 vn.trader/ctaAlgo/data/*
 vn.trader/build/*
 vn.trader/dist/*
 *.bak
 
+vnpy/api/ib/build/
+vnpy/api/ib/ibapi/linux/build/
+
+dist/
+build/
+examples/VnTrader/temp/
+vnpy.egg-info/
+vnpy/api/ctp/build/
+
+vnpy/api/lts/build/

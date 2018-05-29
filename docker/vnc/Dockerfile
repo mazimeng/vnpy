@@ -72,36 +72,37 @@ RUN echo "设置 conda 国内源, 从 conda 安装 python 库" \
 
 RUN echo "从 pip 安装 python 库" \
     && mkdir ~/.pip \
-    && echo "[global]" >> ~/.pip/pip.conf \
-    && echo "index-url = http://pypi.douban.com/simple" >> ~/.pip/pip.conf \
     && echo "使用 pip 安装 python 库" \
-    && pip --trusted-host pypi.douban.com install ta-lib websocket-client qdarkstyle psutil quantopian-tools \
-    && pip --trusted-host pypi.douban.com install zipline
+    && pip install ta-lib websocket-client qdarkstyle psutil quantopian-tools \
+    && pip install zipline
 
+COPY . /srv/vnpy
+WORKDIR /srv/vnpy
 
-RUN echo "安装 fluxbox 桌面管理器" \
-    && apt-get install -y fluxbox
+RUN pip install -e /srv/vnpy
+# 编译安装相关接口库
+#RUN bash -c 'echo "cd /srv/vnpy/vnpy/api/ctp && bash ./build.sh && cp -af ./build/lib/*.so . && cd /srv/vnpy" >> ~/.bashrc'
+RUN bash -c 'cd /srv/vnpy/vnpy/api/ctp && bash ./build.sh && cp -af ./build/lib/*.so . && cd /srv/vnpy'
+RUN sh ./install.sh
 
-#RUN echo "安装 mongodb 服务" \
-#    && mkdir -p /data/db \
-#    && apt-get install -y mongodb \
-#    && systemctl enable mongodb.service \
-#    && sed -i 's/bind_ip = 127.0.0.1/\#bind_ip = 127.0.0.1/g' /etc/mongodb.conf
+#RUN echo "安装 fluxbox 桌面管理器" \
+#    && apt-get install -y fluxbox
+RUN apt-get install -y openbox xfce4-terminal
+RUN echo "安装 mongodb 服务" \
+    && mkdir -p /data/db \
+    && apt-get install -y mongodb \
+    && systemctl enable mongodb.service \
+    && sed -i 's/bind_ip = 127.0.0.1/\#bind_ip = 127.0.0.1/g' /etc/mongodb.conf
 
 # 在客户端登录时自动启动 GUI 程序 (might not be the best way to do it, but it does the trick)
 #RUN bash -c 'echo "python /srv/vnpy/examples/VnTrader/run_simple.py" >> ~/.bashrc'
 #RUN bash -c 'echo "/usr/bin/xterm" >> ~/.bashrc'
 # 设置登录时开启本地 mongodb 服务并激活图形管理界面
 #RUN bash -c 'echo "service mongodb restart" >> ~/.bashrc'
-RUN bash -c 'echo "fluxbox &" >> ~/.bashrc'
-RUN bash -c 'echo "pip install -e /srv/vnpy" >> ~/.bashrc'
-# 编译安装相关接口库
-#RUN bash -c 'echo "cd /srv/vnpy/vnpy/api/ctp && bash ./build.sh && cp -af ./build/lib/*.so . && cd /srv/vnpy" >> ~/.bashrc'
 
 RUN echo "安装配置结束"
 
 
-WORKDIR /srv/vnpy
 
 
 # 暂时不设置入口点，否则不能使用 -it 交互模式
