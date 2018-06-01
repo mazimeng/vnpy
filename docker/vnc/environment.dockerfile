@@ -42,12 +42,6 @@ RUN echo "开始配置 vnpy 环境" \
     && echo "安装编译环境" \
     && apt-get install -y build-essential libboost-all-dev python-dev cmake
 
-RUN echo "安装 VNC 服务，使用固定密码 123456 登录" \
-    && apt-get install -y x11vnc xvfb \
-    && mkdir ~/.vnc \
-    && x11vnc -storepasswd 123456 ~/.vnc/passwd \
-    && apt-get clean
-
 RUN echo "安装 anaconda" \
     && mkdir /tmp/conda/ \
     && cd /tmp/conda/ \
@@ -80,31 +74,14 @@ COPY . /srv/vnpy
 WORKDIR /srv/vnpy
 
 RUN pip install -e /srv/vnpy
+
 # 编译安装相关接口库
 #RUN bash -c 'echo "cd /srv/vnpy/vnpy/api/ctp && bash ./build.sh && cp -af ./build/lib/*.so . && cd /srv/vnpy" >> ~/.bashrc'
 RUN bash -c 'cd /srv/vnpy/vnpy/api/ctp && bash ./build.sh && cp -af ./build/lib/*.so . && cd /srv/vnpy'
 RUN sh ./install.sh
 
-#RUN echo "安装 fluxbox 桌面管理器" \
-#    && apt-get install -y fluxbox
-RUN apt-get install -y openbox xfce4-terminal
 RUN echo "安装 mongodb 服务" \
     && mkdir -p /data/db \
     && apt-get install -y mongodb \
     && systemctl enable mongodb.service \
     && sed -i 's/bind_ip = 127.0.0.1/\#bind_ip = 127.0.0.1/g' /etc/mongodb.conf
-
-# 在客户端登录时自动启动 GUI 程序 (might not be the best way to do it, but it does the trick)
-#RUN bash -c 'echo "python /srv/vnpy/examples/VnTrader/run_simple.py" >> ~/.bashrc'
-RUN bash -c 'echo "/usr/bin/xterm" >> ~/.bashrc'
-# 设置登录时开启本地 mongodb 服务并激活图形管理界面
-#RUN bash -c 'echo "service mongodb restart" >> ~/.bashrc'
-
-RUN echo "安装配置结束"
-
-
-
-
-# 暂时不设置入口点，否则不能使用 -it 交互模式
-# ENTRYPOINT python /srv/vnpy/vn.trader/vtServer.py
-
